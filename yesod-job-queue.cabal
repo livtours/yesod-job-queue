@@ -1,5 +1,5 @@
 name:                yesod-job-queue
-version:             0.3.0.4
+version:             0.4.0.0
 synopsis:            Background jobs library for Yesod.
 description:
   Background jobs library for Yesod
@@ -44,8 +44,8 @@ library
                      , TypeOperators
                      , TypeSynonymInstances
                      , ViewPatterns
-  build-depends:       base >= 4.7 && < 5
-                     , aeson >= 0.6 && < 1.4
+  build-depends:       base >= 4.9.1.0 && <5
+                     , aeson >= 1.4 && < 1.5
                      , api-field-json-th >= 0.1
                      , bytestring
                      , cron >= 0.6.0 && < 0.7

@@ -2,6 +2,7 @@
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE LambdaCase #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
 -- |
@@ -52,7 +53,7 @@ import Text.Read (readMaybe)
 import Yesod.Core
     (HandlerFor, SubHandlerFor, Html, Yesod, YesodSubDispatch(yesodSubDispatch), getYesod,
      hamlet, invalidArgs, mkYesodSubDispatch, notFound, requireJsonBody,
-     returnJson, sendResponse, toContent, withUrlRenderer, liftHandler)
+     returnJson, sendResponse, toContent, withUrlRenderer, liftHandler, MonadUnliftIO)
 import Yesod.Persist.Core (YesodPersistBackend)
 
 -- | Thread ID for convenience
@@ -94,7 +95,7 @@ class (Yesod master, Read (JobType master), Show (JobType master)
     type JobType master
 
     -- | Job Handler
-    runJob :: (MonadBaseControl IO m, MonadIO m)
+    runJob :: (MonadUnliftIO m)
               => master -> JobType master -> ReaderT master m ()
 
     -- | connection info for redis
@@ -110,7 +111,7 @@ class (Yesod master, Read (JobType master), Show (JobType master)
     threadNumber _ = 1
 
     -- | runDB for job
-    runDBJob :: (MonadBaseControl IO m, MonadIO m)
+    runDBJob :: (MonadUnliftIO m)
                 => ReaderT (YesodPersistBackend master) (ReaderT master m) a
                 -> ReaderT master m a
 
@@ -232,8 +233,9 @@ getJobR = liftHandler $ do
 getJobQueueR :: JobHandler master Value
 getJobQueueR = liftHandler $ do
     y <- getYesod
-    Right q <- liftIO $ listQueue y
-    returnJson $ object ["queue" .= q]
+    liftIO (listQueue y) >>= \case
+      Left _ -> returnJson $ object []
+      Right q -> returnJson $ object ["queue" .= q]
 
 -- | enqueue new job
 postJobQueueR :: JobHandler master Value
