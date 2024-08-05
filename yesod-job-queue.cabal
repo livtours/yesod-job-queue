@@ -1,5 +1,5 @@
 name:                yesod-job-queue
-version:             0.4.0.2
+version:             0.4.0.3
 synopsis:            Background jobs library for Yesod.
 description:
   Background jobs library for Yesod
@@ -17,7 +17,7 @@ author:              Daishi Nakajima
 maintainer:          nakaji.dayo@gmail.com
 copyright:           2016 Daishi Nakajima
 category:            Web
-build-type:          Custom
+build-type:          Simple
 extra-source-files:  README.md
                      app/dist/app.bundle.js
                      doc/yesod-job-queue-ss.png
