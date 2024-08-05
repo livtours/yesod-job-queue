@@ -48,12 +48,16 @@ library
                      , aeson >= 2.0.3.0 && < 2.3
                      , api-field-json-th >= 0.1
                      , bytestring
+                     , Cabal
+                     , Cabal-syntax
                      , cron >= 0.6.0 && < 0.8
+                     , directory
                      , file-embed
                      , hedis
                      , lens
                      , monad-control
                      , monad-logger
+                     , process
                      , stm
                      , text
                      , time
